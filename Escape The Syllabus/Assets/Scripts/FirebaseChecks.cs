@@ -13,7 +13,7 @@ public class FirebaseChecks : MonoBehaviour
     public GameObject RegisterMenu;
     private InputField username;
     private InputField password;
-    private InputField repassword
+    private InputField repassword;
     private Firebase.Auth.FirebaseUser user;
     private Firebase.Auth.FirebaseAuth auth;
 
@@ -89,6 +89,7 @@ public class FirebaseChecks : MonoBehaviour
             Debug.LogFormat("User signed in successfully.");
             LoginMenu.SetActive(false);
             MainMenu.SetActive(true);
+            LoginRegisterFeedback.SetActive(false);
         }
 
   );
@@ -118,13 +119,14 @@ public class FirebaseChecks : MonoBehaviour
                 Debug.LogError("CreateUserWithEmailAndPasswordAsync encountered an error: " + task.Exception);
                 return;
             }
-
+            LoginMenu.SetActive(false);
+            MainMenu.SetActive(true);
+            LoginRegisterFeedback.SetActive(false);
             // Firebase user has been created.
             Firebase.Auth.FirebaseUser newUser = task.Result;
             Debug.LogFormat("Firebase user created successfully: {0} ({1})",
                 newUser.DisplayName, newUser.UserId);
-            RegisterMenu.SetActive(false);
-            MainMenu.SetActive(true);
+     
         });
     }
 }
