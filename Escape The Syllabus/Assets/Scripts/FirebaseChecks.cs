@@ -10,14 +10,14 @@ public class FirebaseChecks : MonoBehaviour
     public GameObject MainMenu;
     public GameObject LoginMenu;
     public GameObject LoginRegisterFeedback;
+    public GameObject RegisterMenu;
     private InputField username;
     private InputField password;
+    private InputField repassword
     private Firebase.Auth.FirebaseUser user;
     private Firebase.Auth.FirebaseAuth auth;
 
     void Start() {
-        username = GameObject.Find("UsernameInput").GetComponent<InputField>();
-        password = GameObject.Find("PasswordInput").GetComponent<InputField>();
 
         InitializeFirebase();
     }
@@ -56,6 +56,8 @@ public class FirebaseChecks : MonoBehaviour
 
     public void Login()
     {
+        username = GameObject.Find("UsernameInput").GetComponent<InputField>();
+        password = GameObject.Find("PasswordInput").GetComponent<InputField>();
         auth.SignInWithEmailAndPasswordAsync(username.text, password.text).ContinueWith(task =>
         {
             if (task.IsCanceled)
@@ -96,6 +98,15 @@ public class FirebaseChecks : MonoBehaviour
 
     public void Register()
     {
+        username = GameObject.Find("UsernameInput").GetComponent<InputField>();
+        password = GameObject.Find("PasswordInput").GetComponent<InputField>();
+        repassword = GameObject.Find("RePassInput").GetComponent<InputField>();
+        if (password.text != repassword.text)
+        {
+            LoginRegisterFeedback.GetComponent<TextMeshProUGUI>().text = "passwords do no match";
+            LoginRegisterFeedback.SetActive(true);
+            return;
+        }
         auth.CreateUserWithEmailAndPasswordAsync(username.text, password.text).ContinueWith(task => {
             if (task.IsCanceled)
             {
@@ -112,6 +123,8 @@ public class FirebaseChecks : MonoBehaviour
             Firebase.Auth.FirebaseUser newUser = task.Result;
             Debug.LogFormat("Firebase user created successfully: {0} ({1})",
                 newUser.DisplayName, newUser.UserId);
+            RegisterMenu.SetActive(false);
+            MainMenu.SetActive(true);
         });
     }
 }
