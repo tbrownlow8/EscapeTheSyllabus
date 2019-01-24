@@ -117,16 +117,16 @@ public class FirebaseChecks : MonoBehaviour
             if (task.IsFaulted)
             {
                 Debug.LogError("CreateUserWithEmailAndPasswordAsync encountered an error: " + task.Exception);
+                print("error");
                 return;
             }
-            LoginMenu.SetActive(false);
-            MainMenu.SetActive(true);
-            LoginRegisterFeedback.SetActive(false);
             // Firebase user has been created.
             Firebase.Auth.FirebaseUser newUser = task.Result;
             Debug.LogFormat("Firebase user created successfully: {0} ({1})",
                 newUser.DisplayName, newUser.UserId);
      
         });
+        RegisterMenu.SetActive(false);
+        MainMenu.SetActive(true);
     }
 }
