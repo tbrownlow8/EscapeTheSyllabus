@@ -54,7 +54,7 @@ public class FirebaseChecks : MonoBehaviour
         }
     }
 
-    public void login()
+    public void Login()
     {
         auth.SignInWithEmailAndPasswordAsync(username.text, password.text).ContinueWith(task =>
         {
@@ -94,7 +94,24 @@ public class FirebaseChecks : MonoBehaviour
 
     }
 
+    public void Register()
+    {
+        auth.CreateUserWithEmailAndPasswordAsync(username.text, password.text).ContinueWith(task => {
+            if (task.IsCanceled)
+            {
+                Debug.LogError("CreateUserWithEmailAndPasswordAsync was canceled.");
+                return;
+            }
+            if (task.IsFaulted)
+            {
+                Debug.LogError("CreateUserWithEmailAndPasswordAsync encountered an error: " + task.Exception);
+                return;
+            }
 
-
-
+            // Firebase user has been created.
+            Firebase.Auth.FirebaseUser newUser = task.Result;
+            Debug.LogFormat("Firebase user created successfully: {0} ({1})",
+                newUser.DisplayName, newUser.UserId);
+        });
+    }
 }
