@@ -16,13 +16,12 @@ public class FirebaseChecks : MonoBehaviour
     private InputField repassword;
     private Firebase.Auth.FirebaseUser user;
     private Firebase.Auth.FirebaseAuth auth;
+    private string currentMessage;
+    private string lastMessage;
 
     void Start() {
-
         InitializeFirebase();
     }
-
-
 
     void InitializeFirebase()
     {
@@ -31,7 +30,19 @@ public class FirebaseChecks : MonoBehaviour
         AuthStateChanged(this, null);
     }
 
-    void AuthStateChanged(object sender, System.EventArgs eventArgs)
+    void Update()
+    {
+        // Only update feedback if error message changed
+        if ((lastMessage == null && currentMessage != null) || (lastMessage != null && currentMessage != null && !lastMessage.Equals(currentMessage)))
+        {
+            LoginRegisterFeedback.GetComponent<TextMeshProUGUI>().text = currentMessage;
+            lastMessage = currentMessage;
+            LoginRegisterFeedback.SetActive(true);
+
+        }
+    }
+
+    private void AuthStateChanged(object sender, System.EventArgs eventArgs)
     {
         if (auth.CurrentUser != user)
         {
@@ -41,8 +52,6 @@ public class FirebaseChecks : MonoBehaviour
                 Debug.Log("Signed out " + user.UserId);
                 LoginRegisterFeedback.GetComponent<TextMeshProUGUI>().text = "Signed out";
                 LoginRegisterFeedback.SetActive(true);
-
-
             }
             user = auth.CurrentUser;
             if (signedIn)
@@ -50,51 +59,62 @@ public class FirebaseChecks : MonoBehaviour
                 Debug.Log("Signed in " + user.UserId);
                 LoginRegisterFeedback.GetComponent<TextMeshProUGUI>().text = "Succesfully logged in";
                 LoginRegisterFeedback.SetActive(true);
+
+                // switch screens
+                LoginMenu.SetActive(false);
+                MainMenu.SetActive(true);
             }
         }
     }
 
     public void Login()
     {
+        // retrieve username and password
         username = GameObject.Find("UsernameInput").GetComponent<InputField>();
         password = GameObject.Find("PasswordInput").GetComponent<InputField>();
+        // attempt to login
         auth.SignInWithEmailAndPasswordAsync(username.text, password.text).ContinueWith(task =>
         {
             if (task.IsCanceled)
             {
                 Debug.Log("SignInWithEmailAndPasswordAsync was canceled.");
-                LoginRegisterFeedback.GetComponent<TextMeshProUGUI>().text = "canceled";
-                LoginRegisterFeedback.SetActive(true);
+                lastMessage = currentMessage;
+
+                // currently only displays 1 exception
+                // might need to append to string instead of replacing
+                foreach (System.Exception exception in task.Exception.Flatten().InnerExceptions)
+                {
+                    Firebase.FirebaseException firebaseEx = exception as Firebase.FirebaseException;
+                    if (firebaseEx != null)
+                    {
+                        currentMessage = firebaseEx.Message;
+                        AuthStateChanged(this, null);
+                    }
+                }
                 return;
             }
             if (task.IsFaulted)
             {
                 Debug.Log("SignInWithEmailAndPasswordAsync encountered an error: " + task.Exception.ToString());
-                LoginRegisterFeedback.GetComponent<TextMeshProUGUI>().text = task.Exception.ToString();
-                 LoginRegisterFeedback.SetActive(true);
-                 return;
+                lastMessage = currentMessage;
 
-
-
-
-
-
-
+                // currently only displays 1 exception
+                // might need to append to string instead of replacing
+                foreach (System.Exception exception in task.Exception.Flatten().InnerExceptions) {
+                    Firebase.FirebaseException firebaseEx = exception as Firebase.FirebaseException;
+                    if (firebaseEx != null)
+                    {
+                        currentMessage = firebaseEx.Message;
+                        AuthStateChanged(this, null);
+                    }
+                }
+                return;
             }
-
-
-
+            // successful login
             AuthStateChanged(this, null);
             user = task.Result;
             Debug.LogFormat("User signed in successfully.");
-            LoginMenu.SetActive(false);
-            MainMenu.SetActive(true);
-            LoginRegisterFeedback.SetActive(false);
-        }
-
-  );
-
-
+        });
     }
 
     public void Register()
@@ -124,7 +144,7 @@ public class FirebaseChecks : MonoBehaviour
             Firebase.Auth.FirebaseUser newUser = task.Result;
             Debug.LogFormat("Firebase user created successfully: {0} ({1})",
                 newUser.DisplayName, newUser.UserId);
-     
+
         });
         RegisterMenu.SetActive(false);
         MainMenu.SetActive(true);
