@@ -11,6 +11,8 @@ public class FirebaseChecks : MonoBehaviour
     public GameObject LoginMenu;
     public GameObject LoginRegisterFeedback;
     public GameObject RegisterMenu;
+    public GameObject OptionsMenu;
+    public GameObject StartMenu;
     private InputField username;
     private InputField password;
     private InputField repassword;
@@ -148,5 +150,13 @@ public class FirebaseChecks : MonoBehaviour
         });
         RegisterMenu.SetActive(false);
         MainMenu.SetActive(true);
+    }
+
+    public void Logout()
+    {
+        auth.SignOut();
+
+        OptionsMenu.SetActive(false);
+        StartMenu.SetActive(true);
     }
 }
