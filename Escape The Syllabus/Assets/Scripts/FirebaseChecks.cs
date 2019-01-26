@@ -144,6 +144,8 @@ public class FirebaseChecks : MonoBehaviour
             }
             // Firebase user has been created.
             Firebase.Auth.FirebaseUser newUser = task.Result;
+            DatabaseUtil database = gameObject.GetComponent<DatabaseUtil>();
+            database.writeNewUser(newUser.UserId, newUser.DisplayName);
             Debug.LogFormat("Firebase user created successfully: {0} ({1})",
                 newUser.DisplayName, newUser.UserId);
 
