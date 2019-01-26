@@ -66,15 +66,16 @@ public class FirebaseChecks : MonoBehaviour
                 Debug.Log("Signed in " + user.UserId);
                 LoginRegisterFeedback.GetComponent<TextMeshProUGUI>().text = "Succesfully logged in";
                 LoginRegisterFeedback.SetActive(true);
+
+                //this registers the user in the database for a first time login
                 if (isNewUser)
                 {
-                    Debug.Log("right before database");
                     DatabaseUtil database = DatabaseUtil.GetComponent<DatabaseUtil>();
-                    if (database == null) { Debug.Log("database is null"); }
-                    database.writeNewUser(user.UserId, user.DisplayName);
-                    Debug.Log("right after writeNewUser");
+                    database.writeNewUser(user.UserId, user.Email);
                     isNewUser = false;
+                    Debug.Log("user added to DB");
                 }
+
                 // switch screens
                 LoginMenu.SetActive(false);
                 RegisterMenu.SetActive(false);
