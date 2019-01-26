@@ -11,6 +11,7 @@ public class DatabaseUtil : MonoBehaviour
     DatabaseReference rootReference;
     void Start()
     {
+        Debug.Log("created a database");
         // Set up the Editor before calling into the realtime database.
         FirebaseApp.DefaultInstance.SetEditorDatabaseUrl("https://escapethesyllabus.firebaseio.com/");
 
@@ -19,6 +20,7 @@ public class DatabaseUtil : MonoBehaviour
     }
     public void writeNewUser(string userId, string username)
     {
+        Debug.Log("enter writeNewUser");
         User user = new User(username);
         string json = JsonUtility.ToJson(user);
 

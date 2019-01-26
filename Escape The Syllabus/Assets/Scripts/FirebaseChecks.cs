@@ -4,6 +4,9 @@ using UnityEngine;
 using UnityEngine.UI;
 using Firebase.Auth;
 using TMPro;
+using Firebase.Database;
+using Firebase.Unity.Editor;
+using System.Threading.Tasks;
 
 public class FirebaseChecks : MonoBehaviour
 {
@@ -13,6 +16,7 @@ public class FirebaseChecks : MonoBehaviour
     public GameObject RegisterMenu;
     public GameObject OptionsMenu;
     public GameObject StartMenu;
+    public GameObject DatabaseUtil;
     private InputField username;
     private InputField password;
     private InputField repassword;
@@ -20,6 +24,7 @@ public class FirebaseChecks : MonoBehaviour
     private Firebase.Auth.FirebaseAuth auth;
     private string currentMessage;
     private string lastMessage;
+    private bool isNewUser;
 
     void Start() {
         InitializeFirebase();
@@ -61,9 +66,18 @@ public class FirebaseChecks : MonoBehaviour
                 Debug.Log("Signed in " + user.UserId);
                 LoginRegisterFeedback.GetComponent<TextMeshProUGUI>().text = "Succesfully logged in";
                 LoginRegisterFeedback.SetActive(true);
-
+                if (isNewUser)
+                {
+                    Debug.Log("right before database");
+                    DatabaseUtil database = DatabaseUtil.GetComponent<DatabaseUtil>();
+                    if (database == null) { Debug.Log("database is null"); }
+                    database.writeNewUser(user.UserId, user.DisplayName);
+                    Debug.Log("right after writeNewUser");
+                    isNewUser = false;
+                }
                 // switch screens
                 LoginMenu.SetActive(false);
+                RegisterMenu.SetActive(false);
                 MainMenu.SetActive(true);
             }
         }
@@ -118,9 +132,11 @@ public class FirebaseChecks : MonoBehaviour
             Debug.LogFormat("User signed in successfully.");
         });
     }
-
+  
     public void Register()
     {
+        isNewUser = true;
+        Debug.Log("enter register method");
         username = GameObject.Find("UsernameInput").GetComponent<InputField>();
         password = GameObject.Find("PasswordInput").GetComponent<InputField>();
         repassword = GameObject.Find("RePassInput").GetComponent<InputField>();
@@ -143,17 +159,13 @@ public class FirebaseChecks : MonoBehaviour
                 return;
             }
             // Firebase user has been created.
-            Firebase.Auth.FirebaseUser newUser = task.Result;
-            DatabaseUtil database = gameObject.GetComponent<DatabaseUtil>();
-            database.writeNewUser(newUser.UserId, newUser.DisplayName);
+            Firebase.Auth.FirebaseUser newUser = null;
+            newUser = task.Result;
             Debug.LogFormat("Firebase user created successfully: {0} ({1})",
                 newUser.DisplayName, newUser.UserId);
-
         });
-        RegisterMenu.SetActive(false);
-        MainMenu.SetActive(true);
     }
-
+    
     public void Logout()
     {
         auth.SignOut();
