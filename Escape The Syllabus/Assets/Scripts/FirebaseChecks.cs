@@ -133,7 +133,7 @@ public class FirebaseChecks : MonoBehaviour
             Debug.LogFormat("User signed in successfully.");
         });
     }
-  
+
     public void Register()
     {
         isNewUser = true;
@@ -143,7 +143,7 @@ public class FirebaseChecks : MonoBehaviour
         repassword = GameObject.Find("RePassInput").GetComponent<InputField>();
         if (password.text != repassword.text)
         {
-            LoginRegisterFeedback.GetComponent<TextMeshProUGUI>().text = "passwords do no match";
+            LoginRegisterFeedback.GetComponent<TextMeshProUGUI>().text = "passwords do not match";
             LoginRegisterFeedback.SetActive(true);
             return;
         }
@@ -151,12 +151,36 @@ public class FirebaseChecks : MonoBehaviour
             if (task.IsCanceled)
             {
                 Debug.LogError("CreateUserWithEmailAndPasswordAsync was canceled.");
+                lastMessage = currentMessage;
+
+                // currently only displays 1 exception
+                // might need to append to string instead of replacing
+                foreach (System.Exception exception in task.Exception.Flatten().InnerExceptions)
+                {
+                    Firebase.FirebaseException firebaseEx = exception as Firebase.FirebaseException;
+                    if (firebaseEx != null)
+                    {
+                        currentMessage = firebaseEx.Message;
+                        AuthStateChanged(this, null);
+                    }
+                }
                 return;
             }
             if (task.IsFaulted)
             {
                 Debug.LogError("CreateUserWithEmailAndPasswordAsync encountered an error: " + task.Exception);
-                print("error");
+                lastMessage = currentMessage;
+
+                // currently only displays 1 exception
+                // might need to append to string instead of replacing
+                foreach (System.Exception exception in task.Exception.Flatten().InnerExceptions) {
+                    Firebase.FirebaseException firebaseEx = exception as Firebase.FirebaseException;
+                    if (firebaseEx != null)
+                    {
+                        currentMessage = firebaseEx.Message;
+                        AuthStateChanged(this, null);
+                    }
+                }
                 return;
             }
             // Firebase user has been created.
@@ -166,7 +190,7 @@ public class FirebaseChecks : MonoBehaviour
                 newUser.DisplayName, newUser.UserId);
         });
     }
-    
+
     public void Logout()
     {
         auth.SignOut();
