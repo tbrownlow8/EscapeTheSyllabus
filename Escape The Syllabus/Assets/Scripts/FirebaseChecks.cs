@@ -68,9 +68,15 @@ public class FirebaseChecks : MonoBehaviour
                 LoginRegisterFeedback.GetComponent<TextMeshProUGUI>().text = "Succesfully logged in";
                 LoginRegisterFeedback.SetActive(true);
                 Invoke("HideFeedback", 3);
+
+                // forget username and password combo after sign in
+                GameObject.Find("UsernameInput").GetComponent<InputField>().text= "";
+                GameObject.Find("PasswordInput").GetComponent<InputField>().text ="";
+
                 //this registers the user in the database for a first time login
                 if (isNewUser)
                 {
+                    GameObject.Find("RePassInput").GetComponent<InputField>().text ="";
                     DatabaseUtil database = DatabaseUtil.GetComponent<DatabaseUtil>();
                     database.writeNewUser(user.UserId, user.Email);
                     isNewUser = false;
