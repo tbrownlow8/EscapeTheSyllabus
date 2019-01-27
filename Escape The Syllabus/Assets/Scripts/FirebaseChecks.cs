@@ -59,6 +59,7 @@ public class FirebaseChecks : MonoBehaviour
                 Debug.Log("Signed out " + user.UserId);
                 LoginRegisterFeedback.GetComponent<TextMeshProUGUI>().text = "Signed out";
                 LoginRegisterFeedback.SetActive(true);
+                Invoke("HideFeedback", 3);
             }
             user = auth.CurrentUser;
             if (signedIn)
@@ -66,7 +67,7 @@ public class FirebaseChecks : MonoBehaviour
                 Debug.Log("Signed in " + user.UserId);
                 LoginRegisterFeedback.GetComponent<TextMeshProUGUI>().text = "Succesfully logged in";
                 LoginRegisterFeedback.SetActive(true);
-
+                Invoke("HideFeedback", 3);
                 //this registers the user in the database for a first time login
                 if (isNewUser)
                 {
@@ -82,6 +83,11 @@ public class FirebaseChecks : MonoBehaviour
                 MainMenu.SetActive(true);
             }
         }
+    }
+
+    void HideFeedback()
+    {
+      LoginRegisterFeedback.SetActive(false);
     }
 
     public void Login()
@@ -150,7 +156,7 @@ public class FirebaseChecks : MonoBehaviour
         auth.CreateUserWithEmailAndPasswordAsync(username.text, password.text).ContinueWith(task => {
             if (task.IsCanceled)
             {
-                Debug.LogError("CreateUserWithEmailAndPasswordAsync was canceled.");
+                Debug.Log("CreateUserWithEmailAndPasswordAsync was canceled.");
                 lastMessage = currentMessage;
 
                 // currently only displays 1 exception
@@ -168,7 +174,7 @@ public class FirebaseChecks : MonoBehaviour
             }
             if (task.IsFaulted)
             {
-                Debug.LogError("CreateUserWithEmailAndPasswordAsync encountered an error: " + task.Exception);
+                Debug.Log("CreateUserWithEmailAndPasswordAsync encountered an error: " + task.Exception);
                 lastMessage = currentMessage;
 
                 // currently only displays 1 exception
@@ -194,7 +200,6 @@ public class FirebaseChecks : MonoBehaviour
     public void Logout()
     {
         auth.SignOut();
-
         OptionsMenu.SetActive(false);
         StartMenu.SetActive(true);
     }
