@@ -7,6 +7,7 @@ using TMPro;
 using Firebase.Database;
 using Firebase.Unity.Editor;
 using System.Threading.Tasks;
+using Completed;
 
 public class FirebaseChecks : MonoBehaviour
 {
@@ -17,6 +18,7 @@ public class FirebaseChecks : MonoBehaviour
     public GameObject OptionsMenu;
     public GameObject StartMenu;
     public GameObject DatabaseUtil;
+    public GameObject GameManager;
     private InputField username;
     private InputField password;
     private InputField repassword;
@@ -28,6 +30,7 @@ public class FirebaseChecks : MonoBehaviour
 
     void Start() {
         InitializeFirebase();
+        DontDestroyOnLoad(gameObject);
     }
 
     void InitializeFirebase()
@@ -47,6 +50,15 @@ public class FirebaseChecks : MonoBehaviour
             LoginRegisterFeedback.SetActive(true);
 
         }
+
+        // update level in firebase
+        int level = GameManager.GetComponent<GameManager>().GetLevel();
+        DatabaseUtil database = DatabaseUtil.GetComponent<DatabaseUtil>();
+        if (database != null && user != null) {
+          database.updateCurrentLevel(user.UserId, level);
+          Debug.Log("updated level " + level);
+        }
+
     }
 
     private void AuthStateChanged(object sender, System.EventArgs eventArgs)
@@ -70,14 +82,26 @@ public class FirebaseChecks : MonoBehaviour
                 Invoke("HideFeedback", 3);
 
                 // forget username and password combo after sign in
-                GameObject.Find("UsernameInput").GetComponent<InputField>().text= "";
-                GameObject.Find("PasswordInput").GetComponent<InputField>().text ="";
+                GameObject usernameinput = GameObject.Find("UsernameInput");
+                if (usernameinput != null) {
+                  usernameinput.GetComponent<InputField>().text= "";
+                }
+                GameObject passInput = GameObject.Find("PasswordInput");
+                if (passInput != null) {
+                  passInput.GetComponent<InputField>().text ="";
+                }
+                DatabaseUtil database = DatabaseUtil.GetComponent<DatabaseUtil>();
+
+                // GameManager.GetComponent<GameManager>().SetLevel(database.getCurrentLevel(user.UserId));
+
 
                 //this registers the user in the database for a first time login
                 if (isNewUser)
                 {
-                    GameObject.Find("RePassInput").GetComponent<InputField>().text ="";
-                    DatabaseUtil database = DatabaseUtil.GetComponent<DatabaseUtil>();
+                    GameObject repassInput = GameObject.Find("RePassInput");
+                    if (repassInput != null) {
+                      repassInput.GetComponent<InputField>().text= "";
+                    }
                     database.writeNewUser(user.UserId, user.Email);
                     isNewUser = false;
                     Debug.Log("user added to DB");

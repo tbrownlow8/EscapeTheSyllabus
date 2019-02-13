@@ -25,7 +25,6 @@ namespace Completed
 		private bool doingSetup = true;							//Boolean to check if we're setting up board, prevent Player from moving during setup.
 
 
-
 		//Awake is always called before any Start functions
 		void Awake()
 		{
@@ -85,16 +84,30 @@ namespace Completed
 			doingSetup = true;
 
 			//Get a reference to our image LevelImage by finding it by name.
-			levelImage = GameObject.Find("LevelImage");
+			if (levelImage == null) {
+				levelImage = GameObject.Find("LevelImage");
+
+			}
+			if (levelText == null) {
+				levelText = GameObject.Find("LevelText").GetComponent<Text>();
+
+			}
+
 
 			//Get a reference to our text LevelText's text component by finding it by name and calling GetComponent.
-			levelText = GameObject.Find("LevelText").GetComponent<Text>();
+			// levelText = GameObject.Find("LevelText").GetComponent<Text>();
 
 			//Set the text of levelText to the string "Day" and append the current level number.
-			levelText.text = "Day " + level;
+			// levelText.text = "Day " + level;
+			levelText.text = "Level " + level;
 
 			//Set levelImage to active blocking player's view of the game board during setup.
 			levelImage.SetActive(true);
+
+			// only enable canvas is game is active
+			if (GameObject.Find("Screens") == null) {
+				levelImage.transform.parent.gameObject.GetComponent<Canvas>().enabled=(true);
+			}
 
 			//Call the HideLevelImage function with a delay in seconds of levelStartDelay.
 			Invoke("HideLevelImage", levelStartDelay);
@@ -143,7 +156,8 @@ namespace Completed
 		public void GameOver()
 		{
 			//Set levelText to display number of levels passed and game over message
-			levelText.text = "After " + level + " days, you starved.";
+			// levelText.text = "After " + level + " days, you starved.";
+			levelText.text = "After " + level + " levels, you escaped the syllabus.";
 
 			//Enable black background image gameObject.
 			levelImage.SetActive(true);
@@ -182,6 +196,14 @@ namespace Completed
 
 			//Enemies are done moving, set enemiesMoving to false.
 			enemiesMoving = false;
+		}
+
+		public int GetLevel() {
+			return instance.level;
+		}
+
+		public void SetLevel(int level) {
+			instance.level = level;
 		}
 	}
 }

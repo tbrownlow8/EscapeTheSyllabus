@@ -16,6 +16,7 @@ public class DatabaseUtil : MonoBehaviour
 
         // Get the root reference location of the database.
         rootReference = FirebaseDatabase.DefaultInstance.RootReference;
+        DontDestroyOnLoad(gameObject);
     }
     public void writeNewUser(string userId, string username)
     {
