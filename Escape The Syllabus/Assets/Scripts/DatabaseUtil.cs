@@ -49,24 +49,118 @@ public class DatabaseUtil : MonoBehaviour
     }
 
 
-    public void getLevelsCompleted(string userId)
+    public int getLevelsCompleted(string userId)
     {
-        rootReference.Child("users").Child(userId).Child("levelsCompleted").GetValueAsync();
+        rootReference.Child("users").Child(userId).Child("levelsCompleted").GetValueAsync().ContinueWith(task => {
+            if (task.IsFaulted)
+            {
+                return 0;
+            }
+            else if (task.IsCompleted)
+            {
+                DataSnapshot snapshot = task.Result;
+                if (snapshot != null)
+                {
+                    return snapshot.GetValue(false);
+                } else
+                {
+                    return 0;
+                }
+            }
+            return 0;
+        });
+        return 0;
     }
-    public void getCurrentLevel(string userId)
+    public int getCurrentLevel(string userId)
     {
-        rootReference.Child("users").Child(userId).Child("currentLevel").GetValueAsync();
+        rootReference.Child("users").Child(userId).Child("currentLevel").GetValueAsync().ContinueWith(task => {
+            if (task.IsFaulted)
+            {
+                return 0;
+            }
+            else if (task.IsCompleted)
+            {
+                DataSnapshot snapshot = task.Result;
+                if (snapshot != null)
+                {
+                    return snapshot.GetValue(false);
+                }
+                else
+                {
+                    return 0;
+                }
+            }
+            return 0;
+        });
+        return 0;
     }
-    public void getDeaths(string userId)
+    public int getDeaths(string userId)
     {
-        rootReference.Child("users").Child(userId).Child("deaths").GetValueAsync();
+        rootReference.Child("users").Child(userId).Child("deaths").GetValueAsync().ContinueWith(task => {
+            if (task.IsFaulted)
+            {
+                return 0;
+            }
+            else if (task.IsCompleted)
+            {
+                DataSnapshot snapshot = task.Result;
+                if (snapshot != null)
+                {
+                    return snapshot.GetValue(false);
+                }
+                else
+                {
+                    return 0;
+                }
+            }
+            return 0;
+        });
+        return 0;
     }
-    public void getCorrectAnswers(string userId)
+    public int getCorrectAnswers(string userId)
     {
-        rootReference.Child("users").Child(userId).Child("correctAnswers").GetValueAsync();
+        rootReference.Child("users").Child(userId).Child("correctAnswers").GetValueAsync().ContinueWith(task => {
+            if (task.IsFaulted)
+            {
+                return 0;
+            }
+            else if (task.IsCompleted)
+            {
+                DataSnapshot snapshot = task.Result;
+                if (snapshot != null)
+                {
+                    return snapshot.GetValue(false);
+                }
+                else
+                {
+                    return 0;
+                }
+            }
+            return 0;
+        });
+        return 0;
     }
-    public void getIncorrectAnswers(string userId)
+    public int getIncorrectAnswers(string userId)
     {
-        rootReference.Child("users").Child(userId).Child("incorrectAnswers").GetValueAsync();
+        rootReference.Child("users").Child(userId).Child("incorrectAnswers").GetValueAsync().ContinueWith(task => {
+            if (task.IsFaulted)
+            {
+                return 0;
+            }
+            else if (task.IsCompleted)
+            {
+                DataSnapshot snapshot = task.Result;
+                if (snapshot != null)
+                {
+                    return snapshot.GetValue(false);
+                }
+                else
+                {
+                    return 0;
+                }
+            }
+            return 0;
+        });
+        return 0;
     }
 }

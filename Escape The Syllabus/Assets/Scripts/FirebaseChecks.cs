@@ -111,6 +111,8 @@ public class FirebaseChecks : MonoBehaviour
                 LoginMenu.SetActive(false);
                 RegisterMenu.SetActive(false);
                 MainMenu.SetActive(true);
+                //GameObject testInput = GameObject.Find("TestInput");
+                //testInput.GetComponent<Text>().text = database.getCurrentLevel(user.UserId).ToString();
             }
         }
     }
