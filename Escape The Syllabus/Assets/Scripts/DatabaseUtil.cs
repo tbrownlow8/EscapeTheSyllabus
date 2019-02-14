@@ -25,6 +25,8 @@ public class DatabaseUtil : MonoBehaviour
 
         rootReference.Child("users").Child(userId).SetRawJsonValueAsync(json);
     }
+
+
     public void updateLevelsCompleted(string userId, int levels)
     {
         rootReference.Child("users").Child(userId).Child("levelsCompleted").SetValueAsync(levels);
@@ -44,5 +46,27 @@ public class DatabaseUtil : MonoBehaviour
     public void updateIncorrectAnswers(string userId, int incorrect)
     {
         rootReference.Child("users").Child(userId).Child("incorrectAnswers").SetValueAsync(incorrect);
+    }
+
+
+    public void getLevelsCompleted(string userId)
+    {
+        rootReference.Child("users").Child(userId).Child("levelsCompleted").GetValueAsync();
+    }
+    public void getCurrentLevel(string userId)
+    {
+        rootReference.Child("users").Child(userId).Child("currentLevel").GetValueAsync();
+    }
+    public void getDeaths(string userId)
+    {
+        rootReference.Child("users").Child(userId).Child("deaths").GetValueAsync();
+    }
+    public void getCorrectAnswers(string userId)
+    {
+        rootReference.Child("users").Child(userId).Child("correctAnswers").GetValueAsync();
+    }
+    public void getIncorrectAnswers(string userId)
+    {
+        rootReference.Child("users").Child(userId).Child("incorrectAnswers").GetValueAsync();
     }
 }
