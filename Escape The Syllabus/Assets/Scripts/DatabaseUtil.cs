@@ -1,6 +1,8 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Completed;
+using System;
 
 using Firebase;
 using Firebase.Database;
@@ -9,6 +11,8 @@ using Firebase.Unity.Editor;
 public class DatabaseUtil : MonoBehaviour
 {
     DatabaseReference rootReference;
+    public static DatabaseUtil instance = null;				//Static instance of GameManager which allows it to be accessed by any other script.
+
     void Start()
     {
         // Set up the Editor before calling into the realtime database.
@@ -16,7 +20,27 @@ public class DatabaseUtil : MonoBehaviour
 
         // Get the root reference location of the database.
         rootReference = FirebaseDatabase.DefaultInstance.RootReference;
-        DontDestroyOnLoad(gameObject);
+    }
+    //Awake is always called before any Start functions
+    void Awake()
+    {
+            //Check if instance already exists
+            if (instance == null)
+
+                //if not, set instance to this
+                instance = this;
+
+            //If instance already exists and it's not this:
+            else if (instance != this)
+
+                //Then destroy this. This enforces our singleton pattern, meaning there can only ever be one instance of a GameManager.
+                Destroy(gameObject);
+
+
+      //Sets this to not be destroyed when reloading scene
+      DontDestroyOnLoad(gameObject);
+
+
     }
     public void writeNewUser(string userId, string username)
     {
@@ -71,28 +95,31 @@ public class DatabaseUtil : MonoBehaviour
         });
         return 0;
     }
-    public int getCurrentLevel(string userId)
+    public async void getCurrentLevel(string userId)
     {
-        rootReference.Child("users").Child(userId).Child("currentLevel").GetValueAsync().ContinueWith(task => {
-            if (task.IsFaulted)
+        await rootReference.Child("users").Child(userId).Child("currentLevel").GetValueAsync().ContinueWith(task => {
+            if (task.IsFaulted || task.IsCanceled)
             {
-                return 0;
+                return;
             }
             else if (task.IsCompleted)
             {
                 DataSnapshot snapshot = task.Result;
-                if (snapshot != null)
-                {
-                    return snapshot.GetValue(false);
-                }
-                else
-                {
-                    return 0;
+                if (snapshot != null) {
+                  Debug.Log("snapshot value = " +snapshot.GetValue(false));
+                  if (GameManager.instance != null) {
+
+                  GameManager.instance.level = Convert.ToInt32(snapshot.GetValue(false));
+                  }
+                  return;
                 }
             }
-            return 0;
+            return;
         });
-        return 0;
+        if (GameManager.instance != null) {
+          Debug.Log(GameManager.instance.level);
+        }
+        return;
     }
     public int getDeaths(string userId)
     {
@@ -110,12 +137,12 @@ public class DatabaseUtil : MonoBehaviour
                 }
                 else
                 {
-                    return 0;
+                    return 1;
                 }
             }
-            return 0;
+            return 1;
         });
-        return 0;
+        return 1;
     }
     public int getCorrectAnswers(string userId)
     {

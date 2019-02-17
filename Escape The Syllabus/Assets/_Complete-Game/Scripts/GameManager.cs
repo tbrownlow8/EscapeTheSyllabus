@@ -19,7 +19,7 @@ namespace Completed
 		private Text levelText;									//Text to display current level number.
 		private GameObject levelImage;							//Image to block out level as levels are being set up, background for levelText.
 		private BoardManager boardScript;						//Store a reference to our BoardManager which will set up the level.
-		private int level = 1;									//Current level number, expressed in game as "Day 1".
+		public int level = 1;									//Current level number, expressed in game as "Day 1".
 		private List<Enemy> enemies;							//List of all Enemy units, used to issue them move commands.
 		private bool enemiesMoving;								//Boolean to check if enemies are moving.
 		private bool doingSetup = true;							//Boolean to check if we're setting up board, prevent Player from moving during setup.
@@ -50,11 +50,12 @@ namespace Completed
 			//Get a component reference to the attached BoardManager script
 			boardScript = GetComponent<BoardManager>();
 
-
 			//Call the InitGame function to initialize the first level
 			InitGame();
 
 		}
+
+
 
         //this is called only once, and the paramter tell it to be called only after the scene was loaded
         //(otherwise, our Scene Load callback would be called the very first load, and we don't want that)
@@ -63,13 +64,15 @@ namespace Completed
         {
             //register the callback to be called everytime the scene is loaded
             SceneManager.sceneLoaded += OnSceneLoaded;
+
         }
 
         //This is called each time a scene is loaded.
         static private void OnSceneLoaded(Scene arg0, LoadSceneMode arg1)
         {
             instance.level++;
-
+						// updates level in database 
+						DatabaseUtil.instance.updateCurrentLevel(FirebaseChecks.instance.GetUserId(), instance.level);
 						if (instance.level > 1) {
 							GameObject.Find("Screens").SetActive(false);
 						}
@@ -116,6 +119,7 @@ namespace Completed
 			enemies.Clear();
 
 			//Call the SetupScene function of the BoardManager script, pass it current level number.
+
 			boardScript.SetupScene(level);
 
 		}
@@ -196,14 +200,6 @@ namespace Completed
 
 			//Enemies are done moving, set enemiesMoving to false.
 			enemiesMoving = false;
-		}
-
-		public int GetLevel() {
-			return instance.level;
-		}
-
-		public void SetLevel(int level) {
-			instance.level = level;
 		}
 	}
 }

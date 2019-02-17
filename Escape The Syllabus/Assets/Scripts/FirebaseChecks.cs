@@ -8,6 +8,7 @@ using Firebase.Database;
 using Firebase.Unity.Editor;
 using System.Threading.Tasks;
 using Completed;
+using UnityEngine.SceneManagement;
 
 public class FirebaseChecks : MonoBehaviour
 {
@@ -18,7 +19,6 @@ public class FirebaseChecks : MonoBehaviour
     public GameObject OptionsMenu;
     public GameObject StartMenu;
     public GameObject DatabaseUtil;
-    public GameObject GameManager;
     private InputField username;
     private InputField password;
     private InputField repassword;
@@ -27,10 +27,32 @@ public class FirebaseChecks : MonoBehaviour
     private string currentMessage;
     private string lastMessage;
     private bool isNewUser;
+    public static FirebaseChecks instance = null;				//Static instance of GameManager which allows it to be accessed by any other script.
+
 
     void Start() {
         InitializeFirebase();
-        DontDestroyOnLoad(gameObject);
+    }
+    //Awake is always called before any Start functions
+    void Awake()
+    {
+            //Check if instance already exists
+            if (instance == null)
+
+                //if not, set instance to this
+                instance = this;
+
+            //If instance already exists and it's not this:
+            else if (instance != this)
+
+                //Then destroy this. This enforces our singleton pattern, meaning there can only ever be one instance of a GameManager.
+                Destroy(gameObject);
+
+
+      //Sets this to not be destroyed when reloading scene
+      DontDestroyOnLoad(gameObject);
+
+
     }
 
     void InitializeFirebase()
@@ -51,12 +73,10 @@ public class FirebaseChecks : MonoBehaviour
 
         }
 
-        // update level in firebase
-        int level = GameManager.GetComponent<GameManager>().GetLevel();
         DatabaseUtil database = DatabaseUtil.GetComponent<DatabaseUtil>();
-        if (database != null && user != null) {
-          database.updateCurrentLevel(user.UserId, level);
-          Debug.Log("updated level " + level);
+        if (database != null && user != null && GameManager.instance != null) {
+          int level = GameManager.instance.level;
+          Debug.Log("current level in game: " + level);
         }
 
     }
@@ -111,8 +131,7 @@ public class FirebaseChecks : MonoBehaviour
                 LoginMenu.SetActive(false);
                 RegisterMenu.SetActive(false);
                 MainMenu.SetActive(true);
-                //GameObject testInput = GameObject.Find("TestInput");
-                //testInput.GetComponent<Text>().text = database.getCurrentLevel(user.UserId).ToString();
+                // reads level from database AND sets level in game
             }
         }
     }
@@ -169,6 +188,7 @@ public class FirebaseChecks : MonoBehaviour
             AuthStateChanged(this, null);
             user = task.Result;
             Debug.LogFormat("User signed in successfully.");
+
         });
     }
 
@@ -234,5 +254,29 @@ public class FirebaseChecks : MonoBehaviour
         auth.SignOut();
         OptionsMenu.SetActive(false);
         StartMenu.SetActive(true);
+    }
+
+    public string GetUserId() {
+      if (user != null) {
+        return user.UserId;
+      } else {
+        return null;
+      }
+    }
+
+    public void StartFromCurrentLevel() {
+      if (user != null) {
+        DatabaseUtil database = DatabaseUtil.GetComponent<DatabaseUtil>();
+        database.getCurrentLevel(user.UserId);
+
+      }
+    }
+
+    public void StartFromSpecificLevel(int i) {
+      if (user != null) {
+        DatabaseUtil database = DatabaseUtil.GetComponent<DatabaseUtil>();
+        GameManager.instance.level = i;
+        database.updateCurrentLevel(user.UserId, i);
+      }
     }
 }
