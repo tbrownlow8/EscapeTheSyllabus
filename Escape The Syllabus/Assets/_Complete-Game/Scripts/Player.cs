@@ -59,22 +59,32 @@ namespace Completed
 			if(!GameManager.instance.playersTurn) return;
 
 			int horizontal = 0;  	//Used to store the horizontal move direction.
-			int vertical = 0;		//Used to store the vertical move direction.
+			int vertical = 0;       //Used to store the vertical move direction.
 
-			//Check if we are running either in the Unity editor or in a standalone build.
+            //Check if we are running either in the Unity editor or in a standalone build.
 #if UNITY_STANDALONE || UNITY_WEBPLAYER || UNITY_EDITOR
 
-			//Get input from the input manager, round it to an integer and store in horizontal to set x axis move direction
-			horizontal = (int) (Input.GetAxisRaw ("Horizontal"));
+            Vector3 movement = new Vector3(Input.GetAxis("Horizontal"), Input.GetAxis("Vertical"), 0.0f);
 
-			//Get input from the input manager, round it to an integer and store in vertical to set y axis move direction
-			vertical = (int) (Input.GetAxisRaw ("Vertical"));
+            animator.SetFloat("Horizontal", movement.x);
+            animator.SetFloat("Vertical", movement.y);
+            animator.SetFloat("Magnitude", movement.magnitude);
 
-			//Check if moving horizontally, if so set vertical to zero.
-			if(horizontal != 0)
-			{
-				vertical = 0;
-			}
+            transform.position = transform.position + movement * Time.deltaTime;
+
+            //Get input from the input manager, round it to an integer and store in horizontal to set x axis move direction
+            //         horizontal = (int) (Input.GetAxisRaw ("Horizontal"));
+            horizontal = (int) movement.x;
+            vertical = (int) movement.y;
+
+			////Get input from the input manager, round it to an integer and store in vertical to set y axis move direction
+			//vertical = (int) (Input.GetAxisRaw ("Vertical"));
+
+			////Check if moving horizontally, if so set vertical to zero.
+			//if(horizontal != 0)
+			//{
+			//	vertical = 0;
+			//}
 			//Check if we are running on iOS, Android, Windows Phone 8 or Unity iPhone
 #elif UNITY_IOS || UNITY_ANDROID || UNITY_WP8 || UNITY_IPHONE
 
