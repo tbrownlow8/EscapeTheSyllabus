@@ -70,15 +70,22 @@ namespace Completed
         //This is called each time a scene is loaded.
         static private void OnSceneLoaded(Scene arg0, LoadSceneMode arg1)
         {
-            instance.level++;
-						// updates level in database 
-						DatabaseUtil.instance.updateCurrentLevel(FirebaseChecks.instance.GetUserId(), instance.level);
-						if (instance.level > 1) {
-							GameObject.Find("Screens").SetActive(false);
-						}
-            instance.InitGame();
-        }
+            if (!arg0.Equals("Persistent"))
+            {
+                return;
+            }
+                instance.level++;
+                // updates level in database 
+                DatabaseUtil.instance.updateCurrentLevel(FirebaseChecks.instance.GetUserId(), instance.level);
+                if (instance.level > 1)
+                {
+                    GameObject.Find("Screens").SetActive(false);
+                }
 
+                instance.InitGame();
+            
+        }
+       
 
 		//Initializes the game for each level.
 		void InitGame()
