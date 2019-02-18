@@ -120,8 +120,6 @@ namespace Completed
 			//Check if we have a non-zero value for horizontal or vertical
 			if(horizontal != 0 || vertical != 0)
 			{
-                horizontal = 1;
-                vertical = 1;
 				//Call AttemptMove passing in the generic parameter Wall, since that is what Player may interact with if they encounter one (by attacking it)
 				//Pass in horizontal and vertical as parameters to specify the direction to move Player in.
 				AttemptMove<Wall> (horizontal, vertical);
