@@ -38,7 +38,7 @@ namespace Completed
 			food = GameManager.instance.playerFoodPoints;
 
 			//Set the foodText to reflect the current player food total.
-			foodText.text = "Food: " + food;
+			foodText.text = "Score: " + food;
 
 			//Call the Start function of the MovingObject base class.
 			base.Start ();
@@ -154,7 +154,7 @@ if(horizontal != 0)
 			food--;
 
 			//Update food text display to reflect current score.
-			foodText.text = "Food: " + food;
+			foodText.text = "Score: " + food;
 
 			//Call the AttemptMove method of the base class, passing in the component T (in this case Wall) and x and y direction to move.
 			base.AttemptMove <T> (xDir, yDir);
@@ -212,7 +212,7 @@ if(horizontal != 0)
 				food += pointsPerFood;
 
 				//Update foodText to represent current total and notify player that they gained points
-				foodText.text = "+" + pointsPerFood + " Food: " + food;
+				foodText.text = "+" + pointsPerFood + " Score: " + food;
 
 				//Call the RandomizeSfx function of SoundManager and pass in two eating sounds to choose between to play the eating sound effect.
 				SoundManager.instance.RandomizeSfx (eatSound1, eatSound2);
@@ -228,7 +228,7 @@ if(horizontal != 0)
 				food += pointsPerSoda;
 
 				//Update foodText to represent current total and notify player that they gained points
-				foodText.text = "+" + pointsPerSoda + " Food: " + food;
+				foodText.text = "+" + pointsPerSoda + " Score: " + food;
 
 				//Call the RandomizeSfx function of SoundManager and pass in two drinking sounds to choose between to play the drinking sound effect.
 				SoundManager.instance.RandomizeSfx (drinkSound1, drinkSound2);
@@ -244,7 +244,9 @@ if(horizontal != 0)
 		{
 			//Load the last scene loaded, in this case Main, the only scene in the game. And we load it in "Single" mode so it replace the existing one
             //and not load all the scene object in the current scene.
-            SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex, LoadSceneMode.Single);
+						SceneManager.LoadScene("Persistent", LoadSceneMode.Additive);
+
+            // SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex, LoadSceneMode.Single);
 		}
 
 
@@ -259,7 +261,7 @@ if(horizontal != 0)
 			food -= loss;
 
 			//Update the food display with the new total.
-			foodText.text = "-"+ loss + " Food: " + food;
+			foodText.text = "-"+ loss + " Score: " + food;
 
 			//Check to see if game has ended.
 			CheckIfGameOver ();
