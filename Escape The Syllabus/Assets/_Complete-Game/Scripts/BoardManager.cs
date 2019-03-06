@@ -65,7 +65,7 @@ namespace Completed
 		{
 			//Instantiate Board and set boardHolder to its transform.
 			boardHolder = new GameObject ("Board").transform;
-			
+
 			//Loop along x axis, starting from -1 (to fill corner) with floor or outerwall edge tiles.
 			for(int x = -1; x < columns + 1; x++)
 			{
@@ -145,12 +145,23 @@ namespace Completed
 
 			//Determine number of enemies based on current level number, based on a logarithmic progression
 			int enemyCount = (int)Mathf.Log(level, 2f);
+			if (level == 1) {
+				enemyCount = 1;
+			} else if (level == 2) {
+				enemyCount = 2;
 
+			} else if (level == 3) {
+				enemyCount = 3;
+			} else {
+				enemyCount = 0;
+			}
 			//Instantiate a random number of enemies based on minimum and maximum, at randomized positions.
 			LayoutObjectAtRandom (enemyTiles, enemyCount, enemyCount);
 
 			//Instantiate the exit tile in the upper right hand corner of our game board
 			Instantiate (exit, new Vector3 (columns - 1, rows - 1, 0f), Quaternion.identity);
 		}
+
+		
 	}
 }
