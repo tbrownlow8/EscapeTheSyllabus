@@ -70,10 +70,9 @@ namespace Completed
         //This is called each time a scene is loaded.
         static private void OnSceneLoaded(Scene arg0, LoadSceneMode arg1)
         {
-            if (arg0.Equals("Persistent"))
+            if (arg0.name.Equals("EscapeTheSyllabusUI"))
             {
-                return;
-            }
+
                 instance.level++;
                 // updates level in database
                 DatabaseUtil.instance.updateCurrentLevel(FirebaseChecks.instance.GetUserId(), instance.level);
@@ -84,6 +83,7 @@ namespace Completed
 
                 instance.InitGame();
 
+}
         }
 
 
@@ -122,6 +122,7 @@ namespace Completed
 			//Call the HideLevelImage function with a delay in seconds of levelStartDelay.
 			Invoke("HideLevelImage", levelStartDelay);
 
+
 			//Clear any Enemy objects in our List to prepare for next level.
 			enemies.Clear();
 
@@ -130,6 +131,8 @@ namespace Completed
 			boardScript.SetupScene(level);
 
 		}
+
+
 
 
 		//Hides black image used between levels
