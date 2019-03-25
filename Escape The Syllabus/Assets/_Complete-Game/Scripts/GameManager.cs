@@ -20,6 +20,10 @@ namespace Completed
 		private GameObject levelImage;							//Image to block out level as levels are being set up, background for levelText.
 		private BoardManager boardScript;						//Store a reference to our BoardManager which will set up the level.
 		public int level = 1;									//Current level number, expressed in game as "Day 1".
+		public int levelsCompleted = 0;
+		public int correctAnswers = 0;
+		public int incorrectAnswers = 0;
+		public int deaths = 0;
 		private List<Enemy> enemies;							//List of all Enemy units, used to issue them move commands.
 		private bool enemiesMoving;								//Boolean to check if enemies are moving.
 		private bool doingSetup = true;							//Boolean to check if we're setting up board, prevent Player from moving during setup.
@@ -73,7 +77,12 @@ namespace Completed
             if (arg0.name.Equals("EscapeTheSyllabusUI"))
             {
 
-                instance.level++;
+								if (instance.levelsCompleted < instance.level) {
+									instance.levelsCompleted = instance.level;
+									DatabaseUtil.instance.updateLevelsCompleted(FirebaseChecks.instance.GetUserId(), instance.levelsCompleted);
+								}
+								instance.level++;
+
                 // updates level in database
                 DatabaseUtil.instance.updateCurrentLevel(FirebaseChecks.instance.GetUserId(), instance.level);
                 if (instance.level > 1)
@@ -82,7 +91,6 @@ namespace Completed
                 }
 
                 instance.InitGame();
-
 }
         }
 
