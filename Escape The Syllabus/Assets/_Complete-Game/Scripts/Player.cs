@@ -76,13 +76,13 @@ namespace Completed
             //	vertical = 0;
             //}
             Vector3 movement = new Vector3(Input.GetAxis("Horizontal"), Input.GetAxis("Vertical"), 0.0f);
-						
+
              animator.SetFloat("Horizontal", movement.x);
              animator.SetFloat("Vertical", movement.y);
              animator.SetFloat("Magnitude", movement.magnitude);
-						
+
              transform.position = transform.position + movement * Time.deltaTime;
-						
+
              //Get input from the input manager, round it to an integer and store in horizontal to set x axis move direction
              //         horizontal = (int) (Input.GetAxisRaw ("Horizontal"));
              horizontal = (int) movement.x;
@@ -245,9 +245,9 @@ namespace Completed
 		{
 			//Load the last scene loaded, in this case Main, the only scene in the game. And we load it in "Single" mode so it replace the existing one
             //and not load all the scene object in the current scene.
-						SceneManager.LoadScene("Persistent", LoadSceneMode.Additive);
+						// SceneManager.LoadScene("Persistent", LoadSceneMode.Additive);
 
-            // SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex, LoadSceneMode.Single);
+            SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex, LoadSceneMode.Single);
 		}
 
 

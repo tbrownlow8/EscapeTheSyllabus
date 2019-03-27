@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using Completed;
 using System;
-
+using TMPro;
 using Firebase;
 using Firebase.Database;
 using Firebase.Unity.Editor;
@@ -73,27 +73,52 @@ public class DatabaseUtil : MonoBehaviour
     }
 
 
-    public int getLevelsCompleted(string userId)
+    public async void getLevelsCompleted(string userId)
     {
-        rootReference.Child("users").Child(userId).Child("levelsCompleted").GetValueAsync().ContinueWith(task => {
-            if (task.IsFaulted)
+        //  rootReference.Child("users").Child(userId).Child("levelsCompleted").GetValueAsync().ContinueWith(task => {
+        //     if (task.IsFaulted)
+        //     {
+        //         return 0;
+        //     }
+        //     else if (task.IsCompleted)
+        //     {
+        //         DataSnapshot snapshot = task.Result;
+        //         if (snapshot != null)
+        //         {
+        //           Debug.Log("levels completed " + Convert.ToInt32(snapshot.GetValue(false)).ToString());
+        //
+        //           return Convert.ToInt32(snapshot.GetValue(false));
+        //
+        //
+        //         } else
+        //         {
+        //             return 0;
+        //         }
+        //     }
+        //     return 0;
+        // });
+        await rootReference.Child("users").Child(userId).Child("levelsCompleted").GetValueAsync().ContinueWith(task => {
+            if (task.IsFaulted || task.IsCanceled)
             {
-                return 0;
+                return;
             }
             else if (task.IsCompleted)
             {
                 DataSnapshot snapshot = task.Result;
-                if (snapshot != null)
-                {
-                    return snapshot.GetValue(false);
-                } else
-                {
-                    return 0;
+                if (snapshot != null) {
+                  Debug.Log("snapshot value = " +snapshot.GetValue(false));
+                  if (GameManager.instance != null) {
+
+                  GameManager.instance.levelsCompleted = Convert.ToInt32(snapshot.GetValue(false));
+                  }
+                  return;
                 }
             }
-            return 0;
+            return;
         });
-        return 0;
+
+        return;
+
     }
     public async void getCurrentLevel(string userId)
     {
@@ -121,73 +146,76 @@ public class DatabaseUtil : MonoBehaviour
         }
         return;
     }
-    public int getDeaths(string userId)
+    public async void getDeaths(string userId)
     {
-        rootReference.Child("users").Child(userId).Child("deaths").GetValueAsync().ContinueWith(task => {
-            if (task.IsFaulted)
-            {
-                return 0;
-            }
-            else if (task.IsCompleted)
-            {
-                DataSnapshot snapshot = task.Result;
-                if (snapshot != null)
-                {
-                    return snapshot.GetValue(false);
+      await rootReference.Child("users").Child(userId).Child("deaths").GetValueAsync().ContinueWith(task => {
+          if (task.IsFaulted || task.IsCanceled)
+          {
+              return;
+          }
+          else if (task.IsCompleted)
+          {
+              DataSnapshot snapshot = task.Result;
+              if (snapshot != null) {
+                Debug.Log("snapshot value = " +snapshot.GetValue(false));
+                if (GameManager.instance != null) {
+
+                GameManager.instance.deaths = Convert.ToInt32(snapshot.GetValue(false));
                 }
-                else
-                {
-                    return 1;
-                }
-            }
-            return 1;
-        });
-        return 1;
+                return;
+              }
+          }
+          return;
+      });
+
+      return;
     }
-    public int getCorrectAnswers(string userId)
+    public async void getCorrectAnswers(string userId)
     {
-        rootReference.Child("users").Child(userId).Child("correctAnswers").GetValueAsync().ContinueWith(task => {
-            if (task.IsFaulted)
-            {
-                return 0;
-            }
-            else if (task.IsCompleted)
-            {
-                DataSnapshot snapshot = task.Result;
-                if (snapshot != null)
-                {
-                    return snapshot.GetValue(false);
+      await rootReference.Child("users").Child(userId).Child("correctAnswers").GetValueAsync().ContinueWith(task => {
+          if (task.IsFaulted || task.IsCanceled)
+          {
+              return;
+          }
+          else if (task.IsCompleted)
+          {
+              DataSnapshot snapshot = task.Result;
+              if (snapshot != null) {
+                Debug.Log("snapshot value = " +snapshot.GetValue(false));
+                if (GameManager.instance != null) {
+
+                GameManager.instance.correctAnswers = Convert.ToInt32(snapshot.GetValue(false));
                 }
-                else
-                {
-                    return 0;
-                }
-            }
-            return 0;
-        });
-        return 0;
+                return;
+              }
+          }
+          return;
+      });
+
+      return;
     }
-    public int getIncorrectAnswers(string userId)
+    public async void getIncorrectAnswers(string userId)
     {
-        rootReference.Child("users").Child(userId).Child("incorrectAnswers").GetValueAsync().ContinueWith(task => {
-            if (task.IsFaulted)
-            {
-                return 0;
-            }
-            else if (task.IsCompleted)
-            {
-                DataSnapshot snapshot = task.Result;
-                if (snapshot != null)
-                {
-                    return snapshot.GetValue(false);
+      await rootReference.Child("users").Child(userId).Child("incorrectAnswers").GetValueAsync().ContinueWith(task => {
+          if (task.IsFaulted || task.IsCanceled)
+          {
+              return;
+          }
+          else if (task.IsCompleted)
+          {
+              DataSnapshot snapshot = task.Result;
+              if (snapshot != null) {
+                Debug.Log("snapshot value = " +snapshot.GetValue(false));
+                if (GameManager.instance != null) {
+
+                GameManager.instance.incorrectAnswers = Convert.ToInt32(snapshot.GetValue(false));
                 }
-                else
-                {
-                    return 0;
-                }
-            }
-            return 0;
-        });
-        return 0;
+                return;
+              }
+          }
+          return;
+      });
+
+      return;
     }
 }

@@ -10,6 +10,7 @@ using System.Threading.Tasks;
 using Completed;
 using UnityEngine.SceneManagement;
 
+
 public class FirebaseChecks : MonoBehaviour
 {
     public GameObject MainMenu;
@@ -19,6 +20,14 @@ public class FirebaseChecks : MonoBehaviour
     public GameObject OptionsMenu;
     public GameObject StartMenu;
     public GameObject DatabaseUtil;
+    public GameObject Stat1;
+    public GameObject Stat2;
+    public GameObject Stat3;
+    public GameObject Stat4;
+    public GameObject Stat5;
+    public GameObject Stat6;
+    public GameObject Stat7;
+    public GameObject Stat8;
     private InputField username;
     private InputField password;
     private InputField repassword;
@@ -278,5 +287,54 @@ public class FirebaseChecks : MonoBehaviour
         GameManager.instance.level = i;
         database.updateCurrentLevel(user.UserId, i);
       }
+    }
+
+    public void UpdateStats() {
+      if (user != null) {
+        DatabaseUtil database = DatabaseUtil.GetComponent<DatabaseUtil>();
+
+        // update levels completed
+        string s = GameManager.instance.levelsCompleted.ToString();
+        database.getLevelsCompleted(user.UserId);
+        Stat1.GetComponent<TextMeshProUGUI>().text = "Levels Completed: " +s;
+
+        // update levels remaining
+        // based on current levels or levels completed?
+        // also how many total levels?
+        int totalLevels = 3;
+        s = (totalLevels - GameManager.instance.levelsCompleted).ToString();
+        Stat2.GetComponent<TextMeshProUGUI>().text = "Levels Remaining: " +s;
+
+        // update questions answered
+
+        database.getCorrectAnswers(user.UserId);
+        database.getIncorrectAnswers(user.UserId);
+        int totalQuestions = GameManager.instance.correctAnswers + GameManager.instance.incorrectAnswers;
+        s = totalQuestions.ToString();
+        Stat3.GetComponent<TextMeshProUGUI>().text = "Questions Answered: " +s;
+
+        // update questions correct
+        s = GameManager.instance.correctAnswers.ToString();
+        Stat4.GetComponent<TextMeshProUGUI>().text = "Questions Correct: " +s;
+
+        // update questions wrong
+        s = GameManager.instance.incorrectAnswers.ToString();
+        Stat5.GetComponent<TextMeshProUGUI>().text = "Questions Wrong: " +s;
+
+        // update correct answer %
+        if (totalQuestions != 0) {
+          s = ((double)GameManager.instance.correctAnswers/(double)totalQuestions*100).ToString("0.0");
+          Stat6.GetComponent<TextMeshProUGUI>().text = "Correct Answer %: " +s;
+        }
+
+        // update lives lost
+        database.getDeaths(user.UserId);
+        s = GameManager.instance.deaths.ToString();
+        Stat7.GetComponent<TextMeshProUGUI>().text = "Lives Lost: " +s;
+
+        // update time spent
+
+      }
+
     }
 }
