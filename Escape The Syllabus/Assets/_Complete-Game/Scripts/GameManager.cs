@@ -15,7 +15,6 @@ namespace Completed
 		public static GameManager instance = null;				//Static instance of GameManager which allows it to be accessed by any other script.
 		[HideInInspector] public bool playersTurn = true;		//Boolean to check if it's players turn, hidden in inspector but public.
 
-
 		private Text levelText;									//Text to display current level number.
 		private GameObject levelImage;							//Image to block out level as levels are being set up, background for levelText.
 		private BoardManager boardScript;						//Store a reference to our BoardManager which will set up the level.
@@ -27,7 +26,6 @@ namespace Completed
 		private List<Enemy> enemies;							//List of all Enemy units, used to issue them move commands.
 		private bool enemiesMoving;								//Boolean to check if enemies are moving.
 		private bool doingSetup = true;							//Boolean to check if we're setting up board, prevent Player from moving during setup.
-
 
 		//Awake is always called before any Start functions
 		void Awake()
@@ -55,7 +53,7 @@ namespace Completed
 			boardScript = GetComponent<BoardManager>();
 
 			//Call the InitGame function to initialize the first level
-			InitGame();
+
 
 		}
 
@@ -96,7 +94,7 @@ namespace Completed
 
 
 		//Initializes the game for each level.
-		void InitGame()
+		public void InitGame()
 		{
 			//While doingSetup is true the player can't move, prevent player from moving while title card is up.
 			doingSetup = true;
@@ -135,8 +133,9 @@ namespace Completed
 			enemies.Clear();
 
 			//Call the SetupScene function of the BoardManager script, pass it current level number.
-
 			boardScript.SetupScene(level);
+
+
 
 		}
 

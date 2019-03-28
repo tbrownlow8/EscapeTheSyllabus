@@ -27,7 +27,6 @@ public class FirebaseChecks : MonoBehaviour
     public GameObject Stat5;
     public GameObject Stat6;
     public GameObject Stat7;
-    public GameObject Stat8;
     private InputField username;
     private InputField password;
     private InputField repassword;
@@ -277,7 +276,9 @@ public class FirebaseChecks : MonoBehaviour
       if (user != null) {
         DatabaseUtil database = DatabaseUtil.GetComponent<DatabaseUtil>();
         database.getCurrentLevel(user.UserId);
+        Debug.Log("setup level " + GameManager.instance.level);
 
+        GameManager.instance.InitGame();
       }
     }
 
@@ -286,6 +287,8 @@ public class FirebaseChecks : MonoBehaviour
         DatabaseUtil database = DatabaseUtil.GetComponent<DatabaseUtil>();
         GameManager.instance.level = i;
         database.updateCurrentLevel(user.UserId, i);
+        GameManager.instance.InitGame();
+
       }
     }
 
