@@ -52,7 +52,7 @@ namespace Completed
 			enemies = new List<Enemy>();
 
 			//Get a component reference to the attached BoardManager script
-			boardScript = GetComponent<BoardManager>();
+			//boardScript = GetComponent<BoardManager>();
 
 			//Call the InitGame function to initialize the first level
 			InitGame();
@@ -136,7 +136,7 @@ namespace Completed
 
 			//Call the SetupScene function of the BoardManager script, pass it current level number.
 
-			boardScript.SetupScene(level);
+			//boardScript.SetupScene(level);
 
 		}
 

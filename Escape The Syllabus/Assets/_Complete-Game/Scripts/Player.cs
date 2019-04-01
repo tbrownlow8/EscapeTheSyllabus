@@ -19,10 +19,12 @@ namespace Completed
 		public AudioClip eatSound2;					//2 of 2 Audio clips to play when player collects a food object.
 		public AudioClip drinkSound1;				//1 of 2 Audio clips to play when player collects a soda object.
 		public AudioClip drinkSound2;				//2 of 2 Audio clips to play when player collects a soda object.
-		public AudioClip gameOverSound;				//Audio clip to play when player dies.
+		public AudioClip gameOverSound;             //Audio clip to play when player dies.
 
-		private Animator animator;					//Used to store a reference to the Player's animator component.
+        private Animator animator;					//Used to store a reference to the Player's animator component.
 		private int food;                           //Used to store player food points total during level.
+        public Rigidbody2D rb;
+
 #if UNITY_IOS || UNITY_ANDROID || UNITY_WP8 || UNITY_IPHONE
         private Vector2 touchOrigin = -Vector2.one;	//Used to store location of screen touch origin for mobile controls.
 #endif
@@ -33,6 +35,9 @@ namespace Completed
 		{
 			//Get a component reference to the Player's animator component
 			animator = GetComponent<Animator>();
+
+            // Set variable to Rigidbody component
+            //rb = GetComponent<Rigidbody2D>();
 
 			//Get the current food point total stored in GameManager.instance between levels.
 			food = GameManager.instance.playerFoodPoints;
@@ -58,45 +63,26 @@ namespace Completed
 			//If it's not the player's turn, exit the function.
 			if(!GameManager.instance.playersTurn) return;
 
-			int horizontal = 0;  	//Used to store the horizontal move direction.
-			int vertical = 0;       //Used to store the vertical move direction.
+			float horizontal = 0;  	//Used to store the horizontal move direction.
+			float vertical = 0;       //Used to store the vertical move direction.
 
             //Check if we are running either in the Unity editor or in a standalone build.
 #if UNITY_STANDALONE || UNITY_WEBPLAYER || UNITY_EDITOR
-            //Get input from the input manager, round it to an integer and store in horizontal to set x axis move direction
-            //horizontal = (int) (Input.GetAxisRaw ("Horizontal"));
 
+            // Commented out bc its not actually moving player for some reason
+           // Player movement
+            //Vector3 movement = new Vector3(Input.GetAxis("Horizontal"), Input.GetAxis("Vertical"), 0.0f);
 
-            ////Get input from the input manager, round it to an integer and store in vertical to set y axis move direction
-            //vertical = (int) (Input.GetAxisRaw ("Vertical"));
+            // Takes locations from movement & updates in animator for sprites
+             //animator.SetFloat("Horizontal", movement.x);
+             //animator.SetFloat("Vertical", movement.y);
+             //animator.SetFloat("Magnitude", movement.magnitude);
 
-            ////Check if moving horizontally, if so set vertical to zero.
-            //if(horizontal != 0)
-            //{
-            //	vertical = 0;
-            //}
-            Vector3 movement = new Vector3(Input.GetAxis("Horizontal"), Input.GetAxis("Vertical"), 0.0f);
+            // Moves character onscreen with 2.5 speed
+            //transform.position = transform.position + movement * 2.5f * Time.deltaTime;
+            //rb.velocity = new Vector2(movement.x, movement.y);
 
-             animator.SetFloat("Horizontal", movement.x);
-             animator.SetFloat("Vertical", movement.y);
-             animator.SetFloat("Magnitude", movement.magnitude);
-
-             transform.position = transform.position + movement * Time.deltaTime;
-
-             //Get input from the input manager, round it to an integer and store in horizontal to set x axis move direction
-             //         horizontal = (int) (Input.GetAxisRaw ("Horizontal"));
-             horizontal = (int) movement.x;
-             vertical = (int) movement.y;
-
-			//Get input from the input manager, round it to an integer and store in vertical to set y axis move direction
-			//vertical = (int) (Input.GetAxisRaw ("Vertical"));
-
-			////Check if moving horizontally, if so set vertical to zero.
-			//if(horizontal != 0)
-			//{
-			//	vertical = 0;
-			//}
-			//Check if we are running on iOS, Android, Windows Phone 8 or Unity iPhone
+            //Check if we are running on iOS, Android, Windows Phone 8 or Unity iPhone
 #elif UNITY_IOS || UNITY_ANDROID || UNITY_WP8 || UNITY_IPHONE
 
 			//Check if Input has registered more than zero touches
@@ -138,12 +124,12 @@ namespace Completed
 			}
 
 #endif //End of mobile platform dependendent compilation section started above with #elif
-			//Check if we have a non-zero value for horizontal or vertical
-			if(horizontal != 0 || vertical != 0)
+            //Check if we have a non-zero value for horizontal or vertical
+            if (horizontal != 0 || vertical != 0)
 			{
 				//Call AttemptMove passing in the generic parameter Wall, since that is what Player may interact with if they encounter one (by attacking it)
 				//Pass in horizontal and vertical as parameters to specify the direction to move Player in.
-				AttemptMove<Wall> (horizontal, vertical);
+				//AttemptMove<Wall> (horizontal, vertical);
 			}
 		}
 

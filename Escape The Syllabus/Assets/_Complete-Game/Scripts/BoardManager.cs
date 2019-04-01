@@ -26,8 +26,8 @@ namespace Completed
 		}
 
 
-		public int columns = 8; 										//Number of columns in our game board.
-		public int rows = 8;											//Number of rows in our game board.
+		public int columns = 10; 										//Number of columns in our game board.
+		public int rows = 18;											//Number of rows in our game board.
 		public Count wallCount = new Count (5, 9);						//Lower and upper limit for our random number of walls per level.
 		public Count foodCount = new Count (1, 5);						//Lower and upper limit for our random number of food items per level.
 		public GameObject exit;											//Prefab to spawn for exit.
