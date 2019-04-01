@@ -120,7 +120,7 @@ public class FirebaseChecks : MonoBehaviour
                 }
                 DatabaseUtil database = DatabaseUtil.GetComponent<DatabaseUtil>();
 
-                // GameManager.GetComponent<GameManager>().SetLevel(database.getCurrentLevel(user.UserId));
+                database.getCurrentLevel(user.UserId);
 
 
                 //this registers the user in the database for a first time login
