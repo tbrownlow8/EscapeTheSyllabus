@@ -43,7 +43,7 @@ namespace Completed
 			food = GameManager.instance.playerFoodPoints;
 
 			//Set the foodText to reflect the current player food total.
-			foodText.text = "Score: " + food;
+			// foodText.text = "Score: " + food;
 
 			//Call the Start function of the MovingObject base class.
 			base.Start ();
