@@ -7,6 +7,10 @@ public class SwitchScenes : MonoBehaviour
 {
     public void ChangeScenes(string scenename)
     {
+        // Shows button click in console
+        Debug.Log("Clicked");
+
+        // Loads scene with specific name
         SceneManager.LoadScene(scenename);
     }
 }
