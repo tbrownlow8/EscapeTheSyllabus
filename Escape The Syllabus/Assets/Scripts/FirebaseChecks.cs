@@ -36,7 +36,7 @@ public class FirebaseChecks : MonoBehaviour
     private string lastMessage;
     private bool isNewUser;
     public static FirebaseChecks instance = null;				//Static instance of GameManager which allows it to be accessed by any other script.
-
+    public GameObject MuteButton;
 
     void Start() {
         InitializeFirebase();
@@ -334,6 +334,20 @@ public class FirebaseChecks : MonoBehaviour
         // update time spent
 
       }
-
     }
+
+      public void ToggleAudio() {
+  			if (MuteButton.GetComponent<TextMeshProUGUI>().text == "Mute Audio") {
+  				MuteButton.GetComponent<TextMeshProUGUI>().text = "Unmute Audio";
+          AudioListener.volume = 0;
+          Debug.Log("muted");
+  			} else {
+  				MuteButton.GetComponent<TextMeshProUGUI>().text = "Mute Audio";
+          AudioListener.volume = 1;
+          Debug.Log("unmuted");
+  			}
+
+  		}
+
+
 }
