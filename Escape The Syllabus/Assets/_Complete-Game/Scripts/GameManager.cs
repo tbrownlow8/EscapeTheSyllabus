@@ -18,7 +18,6 @@ namespace Completed
 
 		private Text levelText;									//Text to display current level number.
 		private GameObject levelImage;							//Image to block out level as levels are being set up, background for levelText.
-		private BoardManager boardScript;						//Store a reference to our BoardManager which will set up the level.
 		public int level = 1;									//Current level number, expressed in game as "Day 1".
 		public int levelsCompleted = 0;
 		public int correctAnswers = 0;
@@ -50,10 +49,6 @@ namespace Completed
 
 			//Assign enemies to a new List of Enemy objects.
 			enemies = new List<Enemy>();
-
-			//Get a component reference to the attached BoardManager script
-			boardScript = GetComponent<BoardManager>();
-
 
 			//Call the InitGame function to initialize the first level
 			InitGame();
@@ -134,10 +129,6 @@ namespace Completed
 
 			//Clear any Enemy objects in our List to prepare for next level.
 			enemies.Clear();
-
-			//Call the SetupScene function of the BoardManager script, pass it current level number.
-			boardScript.SetupScene(level);
-
 		}
 
 
