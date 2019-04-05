@@ -59,36 +59,36 @@ namespace Completed
 
         //this is called only once, and the paramter tell it to be called only after the scene was loaded
         //(otherwise, our Scene Load callback would be called the very first load, and we don't want that)
-        [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.AfterSceneLoad)]
-        static public void CallbackInitialization()
-        {
-            //register the callback to be called everytime the scene is loaded
-            SceneManager.sceneLoaded += OnSceneLoaded;
-
-        }
+        // [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.AfterSceneLoad)]
+        // static public void CallbackInitialization()
+        // {
+        //     //register the callback to be called everytime the scene is loaded
+        //     SceneManager.sceneLoaded += OnSceneLoaded;
+				//
+        // }
 
         //This is called each time a scene is loaded.
-        static private void OnSceneLoaded(Scene arg0, LoadSceneMode arg1)
-        {
-            if (arg0.name.Equals("EscapeTheSyllabusUI"))
-            {
-
-								if (instance.levelsCompleted < instance.level) {
-									instance.levelsCompleted = instance.level;
-									DatabaseUtil.instance.updateLevelsCompleted(FirebaseChecks.instance.GetUserId(), instance.levelsCompleted);
-								}
-								instance.level++;
-
-                // updates level in database
-                DatabaseUtil.instance.updateCurrentLevel(FirebaseChecks.instance.GetUserId(), instance.level);
-                if (instance.level > 1)
-                {
-                    GameObject.Find("Screens").SetActive(false);
-                }
-
-                instance.InitGame();
-}
-        }
+//         static private void OnSceneLoaded(Scene arg0, LoadSceneMode arg1)
+//         {
+//             if (arg0.name.Equals("EscapeTheSyllabusUI"))
+//             {
+//
+// 								if (instance.levelsCompleted < instance.level) {
+// 									instance.levelsCompleted = instance.level;
+// 									DatabaseUtil.instance.updateLevelsCompleted(FirebaseChecks.instance.GetUserId(), instance.levelsCompleted);
+// 								}
+// 								instance.level++;
+//
+//                 // updates level in database
+//                 DatabaseUtil.instance.updateCurrentLevel(FirebaseChecks.instance.GetUserId(), instance.level);
+//                 if (instance.level > 1)
+//                 {
+//                     GameObject.Find("Screens").SetActive(false);
+//                 }
+//
+//                 instance.InitGame();
+// }
+//         }
 
 
 		//Initializes the game for each level.
