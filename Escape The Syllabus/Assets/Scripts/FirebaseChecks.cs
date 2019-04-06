@@ -146,7 +146,9 @@ public class FirebaseChecks : MonoBehaviour
 
     void HideFeedback()
     {
-      LoginRegisterFeedback.SetActive(false);
+      if (LoginRegisterFeedback != null) {
+        LoginRegisterFeedback.SetActive(false);        
+      }
     }
 
     public void Login()
