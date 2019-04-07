@@ -147,7 +147,7 @@ public class FirebaseChecks : MonoBehaviour
     void HideFeedback()
     {
       if (LoginRegisterFeedback != null) {
-        LoginRegisterFeedback.SetActive(false);        
+        LoginRegisterFeedback.SetActive(false);
       }
     }
 
@@ -278,6 +278,7 @@ public class FirebaseChecks : MonoBehaviour
       if (user != null) {
         DatabaseUtil database = DatabaseUtil.GetComponent<DatabaseUtil>();
         database.getCurrentLevel(user.UserId);
+        SceneManager.LoadScene("Level " + GameManager.instance.level);
         Debug.Log("setup level " + GameManager.instance.level);
       }
     }
