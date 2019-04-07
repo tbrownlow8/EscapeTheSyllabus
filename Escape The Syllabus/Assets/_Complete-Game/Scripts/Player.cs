@@ -185,11 +185,20 @@ namespace Completed
 			//Check if the tag of the trigger collided with is Exit.
 			if(other.tag == "Exit")
 			{
-				//Invoke the Restart function to start the next level with a delay of restartLevelDelay (default 1 second).
-				Invoke ("Restart", restartLevelDelay);
+				// //Invoke the Restart function to start the next level with a delay of restartLevelDelay (default 1 second).
+				// Invoke ("Restart", restartLevelDelay);
+				//
+				// //Disable the player object since level is over.
+				// enabled = false;
 
-				//Disable the player object since level is over.
-				enabled = false;
+				if (GameManager.instance.level == 3) {
+					//win
+				} else {
+					GameManager.instance.level++;
+					DatabaseUtil.instance.updateCurrentLevel(FirebaseChecks.instance.GetUserId(), GameManager.instance.level);
+					SceneManager.LoadScene("Level " + GameManager.instance.level);
+
+				}
 			}
 
 			//Check if the tag of the trigger collided with is Food.
