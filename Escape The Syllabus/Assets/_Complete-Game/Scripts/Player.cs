@@ -40,7 +40,7 @@ namespace Completed
             //rb = GetComponent<Rigidbody2D>();
 
 			//Get the current food point total stored in GameManager.instance between levels.
-			food = GameManager.instance.playerFoodPoints;
+
 
 			//Set the foodText to reflect the current player food total.
 			// foodText.text = "Score: " + food;
@@ -53,15 +53,14 @@ namespace Completed
 		//This function is called when the behaviour becomes disabled or inactive.
 		private void OnDisable ()
 		{
-			//When Player object is disabled, store the current local food total in the GameManager so it can be re-loaded in next level.
-			GameManager.instance.playerFoodPoints = food;
+
 		}
 
 
 		private void Update ()
 		{
 			//If it's not the player's turn, exit the function.
-			if(!GameManager.instance.playersTurn) return;
+			
 
 			float horizontal = 0;  	//Used to store the horizontal move direction.
 			float vertical = 0;       //Used to store the vertical move direction.
@@ -183,7 +182,7 @@ namespace Completed
 		private void OnTriggerEnter2D (Collider2D other)
 		{
 			//Check if the tag of the trigger collided with is Exit.
-			if(other.tag == "Exit")
+			if(other.name == "Exit")
 			{
 				// //Invoke the Restart function to start the next level with a delay of restartLevelDelay (default 1 second).
 				// Invoke ("Restart", restartLevelDelay);
@@ -202,35 +201,9 @@ namespace Completed
 			}
 
 			//Check if the tag of the trigger collided with is Food.
-			else if(other.tag == "Food")
+			else if(other.name == "Enemy3")
 			{
-				//Add pointsPerFood to the players current food total.
-				food += pointsPerFood;
-
-				//Update foodText to represent current total and notify player that they gained points
-				foodText.text = "+" + pointsPerFood + " Score: " + food;
-
-				//Call the RandomizeSfx function of SoundManager and pass in two eating sounds to choose between to play the eating sound effect.
-				SoundManager.instance.RandomizeSfx (eatSound1, eatSound2);
-
-				//Disable the food object the player collided with.
-				other.gameObject.SetActive (false);
-			}
-
-			//Check if the tag of the trigger collided with is Soda.
-			else if(other.tag == "Soda")
-			{
-				//Add pointsPerSoda to players food points total
-				food += pointsPerSoda;
-
-				//Update foodText to represent current total and notify player that they gained points
-				foodText.text = "+" + pointsPerSoda + " Score: " + food;
-
-				//Call the RandomizeSfx function of SoundManager and pass in two drinking sounds to choose between to play the drinking sound effect.
-				SoundManager.instance.RandomizeSfx (drinkSound1, drinkSound2);
-
-				//Disable the soda object the player collided with.
-				other.gameObject.SetActive (false);
+                Debug.Log("hit enemy 3");
 			}
 		}
 
