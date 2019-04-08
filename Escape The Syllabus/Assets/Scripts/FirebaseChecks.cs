@@ -121,6 +121,10 @@ public class FirebaseChecks : MonoBehaviour
                 DatabaseUtil database = DatabaseUtil.GetComponent<DatabaseUtil>();
 
                 database.getCurrentLevel(user.UserId);
+                database.getLevelsCompleted(user.UserId);
+                database.getCorrectAnswers(user.UserId);
+                database.getIncorrectAnswers(user.UserId);
+                database.getDeaths(user.UserId);
 
 
                 //this registers the user in the database for a first time login
@@ -286,8 +290,20 @@ public class FirebaseChecks : MonoBehaviour
     public void StartFromSpecificLevel(int i) {
       if (user != null) {
         DatabaseUtil database = DatabaseUtil.GetComponent<DatabaseUtil>();
-        GameManager.instance.level = i;
-        database.updateCurrentLevel(user.UserId, i);
+        if (GameManager.instance.levelsCompleted == 0 && i > 1) {
+          LoginRegisterFeedback.GetComponent<TextMeshProUGUI>().text = "You have completed " + GameManager.instance.levelsCompleted + " levels. \nLevel " + i + " is locked.";
+          LoginRegisterFeedback.SetActive(true);
+          Invoke("HideFeedback", 3);
+        } else if (i <= GameManager.instance.levelsCompleted + 1) {
+          GameManager.instance.level = i;
+          database.updateCurrentLevel(user.UserId, i);
+          GameObject.Find("Main Camera").GetComponent<SwitchScenes>().ChangeScenes("Level " + i);
+        } else {
+          LoginRegisterFeedback.GetComponent<TextMeshProUGUI>().text = "You have completed " + GameManager.instance.levelsCompleted + " levels. \nLevel " + i + " is locked.";
+          LoginRegisterFeedback.SetActive(true);
+        }
+
+
       }
     }
 
