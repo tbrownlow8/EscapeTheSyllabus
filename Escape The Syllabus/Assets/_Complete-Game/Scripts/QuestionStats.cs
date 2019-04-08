@@ -6,6 +6,6 @@ public static class QuestionStats
 {
     public static bool wasCorrect = false;
     public static int questionNumber = 1;
-    public static int currentLevel;
+    public static int currentLevel = 1;
 
 }

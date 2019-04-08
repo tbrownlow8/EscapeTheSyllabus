@@ -100,7 +100,6 @@ namespace Completed
                 {
                     PlayerLocation.enemy = other.name;
                     Debug.Log("hit enemy " + i);
-                    QuestionStats.currentLevel = 1;
                     PlayerLocation.x = transform.position.x;
                     PlayerLocation.y = transform.position.y;
                     SceneManager.LoadScene("Level " + QuestionStats.currentLevel + " Questions");
