@@ -42,7 +42,7 @@ namespace Completed
 
         private void Awake()
         {
-            
+
         }
         //This function is called when the behaviour becomes disabled or inactive.
         private void OnDisable ()
@@ -71,7 +71,7 @@ namespace Completed
             }
 		}
 
-  
+
 
 
         //OnTriggerEnter2D is sent when another object enters a trigger collider attached to this object (2D physics only).
@@ -86,6 +86,7 @@ namespace Completed
 
                 if (GameManager.instance.level == 3) {
                     //win
+										GameObject.Find("Winner").GetComponent<Canvas>().enabled = true;
                 } else {
                     GameManager.instance.level++;
                     DatabaseUtil.instance.updateCurrentLevel(FirebaseChecks.instance.GetUserId(), GameManager.instance.level);
@@ -121,6 +122,6 @@ namespace Completed
 
 		//LoseFood is called when an enemy attacks the player.
 		//It takes a parameter loss which specifies how many points to lose.
-		
+
 	}
 }
