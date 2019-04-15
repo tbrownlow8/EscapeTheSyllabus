@@ -27,6 +27,8 @@ public class FirebaseChecks : MonoBehaviour
     public GameObject Stat5;
     public GameObject Stat6;
     public GameObject Stat7;
+    public GameObject Stat8;
+
     private InputField username;
     private InputField password;
     private InputField repassword;
@@ -57,7 +59,7 @@ public class FirebaseChecks : MonoBehaviour
                 Destroy(gameObject);
 
 
-      //Sets this to not be destroyed when reloading scene
+      // Sets this to not be destroyed when reloading scene
       DontDestroyOnLoad(gameObject);
 
 
@@ -121,6 +123,12 @@ public class FirebaseChecks : MonoBehaviour
                 DatabaseUtil database = DatabaseUtil.GetComponent<DatabaseUtil>();
 
                 database.getCurrentLevel(user.UserId);
+                database.getLevelsCompleted(user.UserId);
+                database.getCorrectAnswers(user.UserId);
+                database.getIncorrectAnswers(user.UserId);
+                database.getDeaths(user.UserId);
+                database.getScore(user.UserId);
+
 
 
                 //this registers the user in the database for a first time login
@@ -286,8 +294,20 @@ public class FirebaseChecks : MonoBehaviour
     public void StartFromSpecificLevel(int i) {
       if (user != null) {
         DatabaseUtil database = DatabaseUtil.GetComponent<DatabaseUtil>();
-        GameManager.instance.level = i;
-        database.updateCurrentLevel(user.UserId, i);
+        if (GameManager.instance.levelsCompleted == 0 && i > 1) {
+          LoginRegisterFeedback.GetComponent<TextMeshProUGUI>().text = "You have completed " + GameManager.instance.levelsCompleted + " levels. \nLevel " + i + " is locked.";
+          LoginRegisterFeedback.SetActive(true);
+          Invoke("HideFeedback", 3);
+        } else if (i <= GameManager.instance.levelsCompleted + 1) {
+          GameManager.instance.level = i;
+          database.updateCurrentLevel(user.UserId, i);
+          GameObject.Find("Main Camera").GetComponent<SwitchScenes>().ChangeScenes("Level " + i);
+        } else {
+          LoginRegisterFeedback.GetComponent<TextMeshProUGUI>().text = "You have completed " + GameManager.instance.levelsCompleted + " levels. \nLevel " + i + " is locked.";
+          LoginRegisterFeedback.SetActive(true);
+        }
+
+
       }
     }
 
@@ -334,7 +354,11 @@ public class FirebaseChecks : MonoBehaviour
         s = GameManager.instance.deaths.ToString();
         Stat7.GetComponent<TextMeshProUGUI>().text = "Lives Lost: " +s;
 
-        // update time spent
+        // update scores
+        database.getScore(user.UserId);
+        s = GameManager.instance.score.ToString();
+        Stat8.GetComponent<TextMeshProUGUI>().text = "Score: " +s;
+
 
       }
     }
@@ -349,7 +373,6 @@ public class FirebaseChecks : MonoBehaviour
           AudioListener.volume = 1;
           Debug.Log("unmuted");
   			}
-
   		}
 
 

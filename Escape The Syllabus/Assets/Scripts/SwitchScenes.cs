@@ -10,7 +10,15 @@ public class SwitchScenes : MonoBehaviour
         // Shows button click in console
         Debug.Log("Clicked");
 
+
         // Loads scene with specific name
         SceneManager.LoadScene(scenename);
+        if (scenename == "EscapeTheSyllabusUI") {
+          FirebaseChecks.instance.GetComponentInChildren<Canvas>().enabled = false;
+        } else {
+            FirebaseChecks.instance.GetComponentInChildren<Canvas>().enabled = true;
+
+        }
+
     }
 }

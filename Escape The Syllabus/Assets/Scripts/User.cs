@@ -6,6 +6,7 @@
     public int deaths;
     public int correctAnswers;
     public int incorrectAnswers;
+    public int score;
 
     public User()
     {
@@ -19,5 +20,6 @@
         this.deaths = 0;
         this.correctAnswers = 0;
         this.incorrectAnswers = 0;
+        this.score = 0;
     }
 }

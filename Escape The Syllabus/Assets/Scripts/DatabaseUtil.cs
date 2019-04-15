@@ -71,6 +71,10 @@ public class DatabaseUtil : MonoBehaviour
     {
         rootReference.Child("users").Child(userId).Child("incorrectAnswers").SetValueAsync(incorrect);
     }
+    public void updateScore(string userId, int score)
+    {
+        rootReference.Child("users").Child(userId).Child("score").SetValueAsync(score);
+    }
 
 
     public async void getLevelsCompleted(string userId)
@@ -209,6 +213,31 @@ public class DatabaseUtil : MonoBehaviour
                 if (GameManager.instance != null) {
 
                 GameManager.instance.incorrectAnswers = Convert.ToInt32(snapshot.GetValue(false));
+                }
+                return;
+              }
+          }
+          return;
+      });
+
+      return;
+    }
+
+    public async void getScore(string userId)
+    {
+      await rootReference.Child("users").Child(userId).Child("score").GetValueAsync().ContinueWith(task => {
+          if (task.IsFaulted || task.IsCanceled)
+          {
+              return;
+          }
+          else if (task.IsCompleted)
+          {
+              DataSnapshot snapshot = task.Result;
+              if (snapshot != null) {
+                Debug.Log("snapshot value = " +snapshot.GetValue(false));
+                if (GameManager.instance != null) {
+
+                GameManager.instance.score = Convert.ToInt32(snapshot.GetValue(false));
                 }
                 return;
               }
