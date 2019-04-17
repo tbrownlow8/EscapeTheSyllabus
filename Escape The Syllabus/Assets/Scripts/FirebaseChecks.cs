@@ -141,6 +141,12 @@ public class FirebaseChecks : MonoBehaviour
                     database.writeNewUser(user.UserId, user.Email);
                     isNewUser = false;
                     Debug.Log("user added to DB");
+                    database.getCurrentLevel(user.UserId);
+                    database.getLevelsCompleted(user.UserId);
+                    database.getCorrectAnswers(user.UserId);
+                    database.getIncorrectAnswers(user.UserId);
+                    database.getDeaths(user.UserId);
+                    database.getScore(user.UserId);
                 }
 
                 // switch screens
@@ -328,7 +334,6 @@ public class FirebaseChecks : MonoBehaviour
         Stat2.GetComponent<TextMeshProUGUI>().text = "Levels Remaining: " +s;
 
         // update questions answered
-
         database.getCorrectAnswers(user.UserId);
         database.getIncorrectAnswers(user.UserId);
         int totalQuestions = GameManager.instance.correctAnswers + GameManager.instance.incorrectAnswers;
@@ -350,14 +355,14 @@ public class FirebaseChecks : MonoBehaviour
         }
 
         // update lives lost
-        database.getDeaths(user.UserId);
-        s = GameManager.instance.deaths.ToString();
-        Stat7.GetComponent<TextMeshProUGUI>().text = "Lives Lost: " +s;
+        // database.getDeaths(user.UserId);
+        // s = GameManager.instance.deaths.ToString();
+        // Stat7.GetComponent<TextMeshProUGUI>().text = "Lives Lost: " +s;
 
         // update scores
-        database.getScore(user.UserId);
-        s = GameManager.instance.score.ToString();
-        Stat8.GetComponent<TextMeshProUGUI>().text = "Score: " +s;
+        // database.getScore(user.UserId);
+        // s = GameManager.instance.score.ToString();
+        // Stat8.GetComponent<TextMeshProUGUI>().text = "Score: " +s;
 
 
       }
