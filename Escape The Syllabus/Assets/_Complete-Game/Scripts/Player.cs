@@ -64,14 +64,14 @@ namespace Completed
                     PlayerLocation.enemies[PlayerLocation.enemy[5] - '0'] = false;
                     QuestionStats.questionNumber++;
                     transform.position = new Vector3(PlayerLocation.x, PlayerLocation.y);
-										//if (GameManager.instance.levelsCompleted < GameManager.instance.level) {
-											//GameManager.instance.score += 100;
-											//DatabaseUtil.instance.updateScore(FirebaseChecks.instance.GetUserId(), GameManager.instance.score);
-											//GameManager.instance.correctAnswers += 1;
-											//DatabaseUtil.instance.updateCorrectAnswers(FirebaseChecks.instance.GetUserId(), GameManager.instance.correctAnswers);
-											//FirebaseChecks.instance.GetComponentInChildren<TextMeshProUGUI>().text = "Score: " +GameManager.instance.score;
+										if (GameManager.instance.levelsCompleted < GameManager.instance.level) {
+											// GameManager.instance.score += 100;
+											// DatabaseUtil.instance.updateScore(FirebaseChecks.instance.GetUserId(), GameManager.instance.score);
+											GameManager.instance.correctAnswers += 1;
+											DatabaseUtil.instance.updateCorrectAnswers(FirebaseChecks.instance.GetUserId(), GameManager.instance.correctAnswers);
+											// FirebaseChecks.instance.GetComponentInChildren<TextMeshProUGUI>().text = "Score: " +GameManager.instance.score;
 
-										//}
+										}
 
                 }
                 else
@@ -80,15 +80,15 @@ namespace Completed
                     if (QuestionStats.currentLevel == 2) { transform.position = PlayerLocation.lvl2start; }
                     if (QuestionStats.currentLevel == 3) { transform.position = PlayerLocation.lvl3start; }
 
-                    //	if (GameManager.instance.levelsCompleted < GameManager.instance.level) {
-                    //GameManager.instance.score -= 50;
-                    //DatabaseUtil.instance.updateScore(FirebaseChecks.instance.GetUserId(), GameManager.instance.score);
-                    //GameManager.instance.incorrectAnswers += 1;
-                    //DatabaseUtil.instance.updateIncorrectAnswers(FirebaseChecks.instance.GetUserId(), GameManager.instance.incorrectAnswers);
-                    //FirebaseChecks.instance.GetComponentInChildren<TextMeshProUGUI>().text = "Score: " +GameManager.instance.score;
+                    	if (GameManager.instance.levelsCompleted < GameManager.instance.level) {
+                    // GameManager.instance.score -= 50;
+                    // DatabaseUtil.instance.updateScore(FirebaseChecks.instance.GetUserId(), GameManager.instance.score);
+                    GameManager.instance.incorrectAnswers += 1;
+                    DatabaseUtil.instance.updateIncorrectAnswers(FirebaseChecks.instance.GetUserId(), GameManager.instance.incorrectAnswers);
+                    // FirebaseChecks.instance.GetComponentInChildren<TextMeshProUGUI>().text = "Score: " +GameManager.instance.score;
 
 
-                    //}
+                    }
 
 
                 }
